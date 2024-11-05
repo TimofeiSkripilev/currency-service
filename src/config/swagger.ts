@@ -1,230 +1,214 @@
-import { env } from './index';
+import env from "./env";
 
 export const swaggerConfig: Record<string, any> = {
-  openapi: '3.0.0',
+  openapi: "3.0.0",
   info: {
-    title: 'Currency Exchange API',
-    version: '1.0.0',
-    description: 'API for currency exchange rates'
+    title: "Currency Exchange API",
+    version: "1.0.0",
+    description: "API for currency exchange rates",
   },
   servers: [
     {
-      url: `${env.API_HOST || 'http://localhost'}:${env.PORT || 3000}`,
-      description: 'Development server'
-    }
+      url: `${env.API_HOST || "http://localhost"}:${env.API_PORT || 3000}`,
+      description: "Development server",
+    },
   ],
   components: {
     securitySchemes: {
       bearerAuth: {
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'JWT'
-      }
-    }
+        type: "http",
+        scheme: "bearer",
+        bearerFormat: "JWT",
+      },
+    },
   },
   security: [{ bearerAuth: [] }],
   paths: {
-    '/api/auth/register': {
+    "/api/auth/register": {
       post: {
-        summary: 'Register a new user',
-        tags: ['auth'],
+        summary: "Register a new user",
+        tags: ["auth"],
         requestBody: {
           required: true,
           content: {
-            'application/json': {
+            "application/json": {
               schema: {
-                type: 'object',
+                type: "object",
                 properties: {
-                  username: { type: 'string' },
-                  password: { type: 'string' }
+                  username: { type: "string" },
+                  password: { type: "string" },
                 },
-                required: ['username', 'password']
-              }
-            }
-          }
+                required: ["username", "password"],
+              },
+            },
+          },
         },
         responses: {
           201: {
-            description: 'User created successfully'
+            description: "User created successfully",
           },
           400: {
-            description: 'Registration failed'
-          }
-        }
-      }
+            description: "Registration failed",
+          },
+        },
+      },
     },
-    '/api/auth/login': {
+    "/api/auth/login": {
       post: {
-        summary: 'Login and get JWT token',
-        tags: ['auth'],
+        summary: "Login and get JWT token",
+        tags: ["auth"],
         requestBody: {
           required: true,
           content: {
-            'application/json': {
+            "application/json": {
               schema: {
-                type: 'object',
+                type: "object",
                 properties: {
-                  username: { type: 'string' },
-                  password: { type: 'string' }
+                  username: { type: "string" },
+                  password: { type: "string" },
                 },
-                required: ['username', 'password']
-              }
-            }
-          }
+                required: ["username", "password"],
+              },
+            },
+          },
         },
         responses: {
           200: {
-            description: 'Login successful',
+            description: "Login successful",
             content: {
-              'application/json': {
+              "application/json": {
                 schema: {
-                  type: 'object',
+                  type: "object",
                   properties: {
-                    token: { type: 'string' }
-                  }
-                }
-              }
-            }
+                    token: { type: "string" },
+                  },
+                },
+              },
+            },
           },
           401: {
-            description: 'Invalid credentials'
+            description: "Invalid credentials",
           },
           400: {
-            description: 'Login failed'
-          }
-        }
-      }
+            description: "Login failed",
+          },
+        },
+      },
     },
-    '/api/currencies/current/{code}': {
+    "/api/currencies/current/{code}": {
       get: {
-        summary: 'Get current rate for a specific currency',
-        tags: ['currencies'],
+        summary: "Get current rate for a specific currency",
+        tags: ["currencies"],
         security: [{ bearerAuth: [] }],
         parameters: [
           {
-            name: 'code',
-            in: 'path',
+            name: "code",
+            in: "path",
             required: true,
-            schema: { type: 'string' },
-            description: 'Currency code (e.g., USD, EUR)'
-          }
+            schema: { type: "string" },
+            description: "Currency code (e.g., USD, EUR)",
+          },
         ],
         responses: {
           200: {
-            description: 'Current rate for the specified currency',
+            description: "Current rate for the specified currency",
             content: {
-              'application/json': {
+              "application/json": {
                 schema: {
-                  type: 'object',
+                  type: "object",
                   properties: {
-                    id: { type: 'integer' },
-                    code: { type: 'string' },
-                    name: { type: 'string' },
-                    rates: {
-                      type: 'array',
-                      items: {
-                        type: 'object',
-                        properties: {
-                          id: { type: 'integer' },
-                          currency_id: { type: 'integer' },
-                          rate: { type: 'number' },
-                          date: { type: 'string', format: 'date' }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
+                    code: { type: "string" },
+                    name: { type: "string" },
+                    rate: { type: "number" },
+                    date: { type: "string", format: "date" }
+                  },
+                },
+              },
+            },
           },
           404: {
-            description: 'Currency not found'
+            description: "Currency not found",
           },
           500: {
-            description: 'Failed to fetch rate'
-          }
-        }
-      }
+            description: "Failed to fetch rate",
+          },
+        },
+      },
     },
-    '/api/currencies/history/{code}': {
+
+    "/api/currencies/history/{code}": {
       get: {
-        summary: 'Get historical rates for a specific currency',
-        tags: ['currencies'],
+        summary: "Get historical rates for a specific currency",
+        tags: ["currencies"],
         security: [{ bearerAuth: [] }],
         parameters: [
           {
-            name: 'code',
-            in: 'path',
+            name: "code",
+            in: "path",
             required: true,
-            schema: { type: 'string' },
-            description: 'Currency code (e.g., USD, EUR)'
-          }
+            schema: { type: "string" },
+            description: "Currency code (e.g., USD, EUR)",
+          },
         ],
         responses: {
           200: {
-            description: 'Historical rates for the specified currency',
+            description: "Historical rates for the specified currency",
             content: {
-              'application/json': {
+              "application/json": {
                 schema: {
-                  type: 'object',
+                  type: "object",
                   properties: {
-                    id: { type: 'integer' },
-                    code: { type: 'string' },
-                    name: { type: 'string' },
+                    code: { type: "string" },
+                    name: { type: "string" },
                     rates: {
-                      type: 'array',
-                      items: {
-                        type: 'object',
-                        properties: {
-                          id: { type: 'integer' },
-                          currency_id: { type: 'integer' },
-                          rate: { type: 'number' },
-                          date: { type: 'string', format: 'date' }
-                        }
-                      }
+                      type: "object",
+                      additionalProperties: {
+                        type: "number"
+                      },
+                      description: "Key-value pairs where key is date (YYYY-MM-DD) and value is rate"
                     }
-                  }
-                }
-              }
-            }
+                  },
+                },
+              },
+            },
           },
           404: {
-            description: 'Currency not found'
+            description: "Currency not found",
           },
           500: {
-            description: 'Failed to fetch history'
-          }
-        }
-      }
+            description: "Failed to fetch history",
+          },
+        },
+      },
     },
-    '/api/currencies/list': {
+    "/api/currencies/list": {
       get: {
-        summary: 'Get list of available currencies',
-        tags: ['currencies'],
+        summary: "Get list of available currencies",
+        tags: ["currencies"],
         security: [{ bearerAuth: [] }],
         responses: {
           200: {
-            description: 'List of currencies',
+            description: "List of currencies",
             content: {
-              'application/json': {
+              "application/json": {
                 schema: {
-                  type: 'array',
+                  type: "array",
                   items: {
-                    type: 'object',
+                    type: "object",
                     properties: {
-                      code: { type: 'string' },
-                      name: { type: 'string' }
-                    }
-                  }
-                }
-              }
-            }
+                      code: { type: "string" },
+                      name: { type: "string" },
+                    },
+                  },
+                },
+              },
+            },
           },
           500: {
-            description: 'Failed to fetch currency list'
-          }
-        }
-      }
-    }
-  }
+            description: "Failed to fetch currency list",
+          },
+        },
+      },
+    },
+  },
 };

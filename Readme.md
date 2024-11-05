@@ -6,15 +6,15 @@
     npm install
 
 2.  Настройте переменные окружения:
-    Создайте файл `.env` в корневой директории и установите следующие переменные:
-    PORT=3000 API*HOST=http://localhost DB_HOST=localhost DB_USER=root DB_PASSWORD=ваш*пароль DB*NAME=currency_service JWT_SECRET=ваш*секретный_ключ_JWT REDIS_URL=redis://localhost:6379
+    Создайте файл `.env.local` в корневой директории (в продакшне просто `.env`) и установите следующие переменные:
+    API_PORT=3000 API*HOST=http://localhost DB_HOST=localhost DB_USER=root DB_PASSWORD=ваш*пароль DB*NAME=currency_service JWT_SECRET=ваш*секретный_ключ_JWT REDIS_URL=redis://localhost:6379
 
 3.  Настройте Redis:
     Убедитесь, что Redis установлен и запущен на вашей системе. На Ubuntu вы можете установить его с помощью:
     sudo apt-get install redis-server
 
     Запустите Redis:
-    sudo systemctl start redis-server
+    sudo systemctl start redis-server или sudo service redis-server start
 
 4.  Настройте MySQL:
     Убедитесь, что MySQL установлен и запущен на вашей системе.
@@ -24,6 +24,8 @@
 
 6.  Запустите сервер разработки:
     npm run dev
+
+    Либо npm run build && npm run start
 
 7.  Для ручного обновления курсов валют:
     npm run update-rates
@@ -70,6 +72,7 @@
 - База данных:
 
   - `db/migrations`: Скрипты миграции базы данных.
+  - `db/seeds`: Изначальные данные пользователей.
   - `src/knexfile.ts`: Файл конфигурации Knex.
 
 - Исходный код:

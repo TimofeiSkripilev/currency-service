@@ -18,4 +18,16 @@ export class Currency extends BaseModel {
       }
     }
   };
+
+  static jsonSchema = {
+    type: 'object',
+    required: ['code', 'name'],
+    properties: {
+      id: { type: 'integer' },
+      code: { type: 'string', minLength: 3, maxLength: 3 },
+      name: { type: 'string' },
+      created_at: { type: 'string', format: 'date-time' },
+      updated_at: { type: 'string', format: 'date-time' }
+    }
+  };
 }
